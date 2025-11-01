@@ -104,8 +104,8 @@ export default function SupportPage() {
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             <Link href="/" className="flex items-center gap-2 sm:gap-3">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 bg-white rounded-lg sm:rounded-xl flex items-center justify-center">
-                <span className="text-xl sm:text-2xl font-bold text-black">U</span>
+              <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-lg flex items-center justify-center">
+                <span className="text-lg sm:text-xl font-bold text-black">U</span>
               </div>
               <h1 className="text-lg sm:text-xl font-bold text-white tracking-tight antialiased">
                 UnCrypto
@@ -120,10 +120,13 @@ export default function SupportPage() {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <Link href="/" className="text-gray-400 hover:text-white transition-all text-sm font-medium px-4 py-2 rounded-lg hover:bg-white/5">
+            <Link href="/" className="text-gray-400 hover:text-white transition-all text-sm font-medium px-4 py-2 rounded-lg hover:bg-white/5 cursor-pointer">
               Swap
             </Link>
-            <Link href="/support" className="text-white font-medium text-sm px-4 py-2 rounded-lg hover:bg-white/5">
+            <Link href="/support#faq" className="text-gray-400 hover:text-white transition-all text-sm font-medium px-4 py-2 rounded-lg hover:bg-white/5 cursor-pointer">
+              FAQ
+            </Link>
+            <Link href="/support" className="text-white font-medium text-sm px-4 py-2 rounded-lg hover:bg-white/5 cursor-pointer">
               Support
             </Link>
           </motion.div>
@@ -158,14 +161,21 @@ export default function SupportPage() {
               <div className="container mx-auto px-4 py-4 space-y-2">
                 <Link
                   href="/"
-                  className="block text-gray-400 hover:text-white transition-all text-sm font-medium px-4 py-3 rounded-lg hover:bg-white/5"
+                  className="block text-gray-400 hover:text-white transition-all text-sm font-medium px-4 py-3 rounded-lg hover:bg-white/5 cursor-pointer"
                   onClick={() => setShowMobileMenu(false)}
                 >
                   Swap
                 </Link>
                 <Link
+                  href="/support#faq"
+                  className="block text-gray-400 hover:text-white transition-all text-sm font-medium px-4 py-3 rounded-lg hover:bg-white/5 cursor-pointer"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  FAQ
+                </Link>
+                <Link
                   href="/support"
-                  className="block text-white font-medium text-sm px-4 py-3 rounded-lg hover:bg-white/5"
+                  className="block text-white font-medium text-sm px-4 py-3 rounded-lg hover:bg-white/5 cursor-pointer"
                   onClick={() => setShowMobileMenu(false)}
                 >
                   Support
@@ -220,7 +230,7 @@ export default function SupportPage() {
       </div>
 
       {/* FAQ Section */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
+      <div id="faq" className="relative z-10 container mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
         <div className="max-w-4xl mx-auto">
           <motion.div
             className="text-center mb-8 sm:mb-12"
@@ -318,74 +328,83 @@ export default function SupportPage() {
       </div>
 
       {/* Footer */}
-      <footer className="relative z-10 bg-black">
-        <div className="border-t border-white/5">
-          <div className="container mx-auto px-6 py-16">
-            <div className="max-w-7xl mx-auto">
+      <footer className="relative z-10 bg-black/60 backdrop-blur-xl">
+        <div className="border-t border-white/10">
+          <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16">
+            <div className="max-w-6xl mx-auto">
 
               {/* Main Footer Content */}
-              <div className="grid md:grid-cols-12 gap-12 mb-16">
+              <div className="grid md:grid-cols-2 gap-12 mb-12">
 
-                {/* Brand - Takes more space */}
-                <div className="md:col-span-5">
-                  <div className="flex items-center gap-3 mb-5">
-                    <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+                {/* Brand */}
+                <div>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="w-11 h-11 bg-white rounded-xl flex items-center justify-center">
                       <span className="text-2xl font-bold text-black">U</span>
                     </div>
                     <h3 className="text-2xl font-bold text-white antialiased">UnCrypto</h3>
                   </div>
-                  <p className="text-gray-400 antialiased leading-relaxed mb-6 max-w-md">
+                  <p className="text-gray-400 antialiased leading-relaxed mb-6">
                     Fast, secure cryptocurrency exchange with real-time rates. No registration required.
                   </p>
-                  <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-4 py-2.5">
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                    <span className="text-sm text-white/80 font-medium antialiased">All Services Online</span>
+                  <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2.5">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
+                    <span className="text-sm text-white font-medium antialiased">All Services Online</span>
                   </div>
                 </div>
 
                 {/* Features */}
-                <div className="md:col-span-7">
-                  <div className="grid sm:grid-cols-3 gap-8">
-                    <div>
-                      <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center mb-4">
-                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                       </div>
-                      <h4 className="text-white font-semibold antialiased mb-2">Built for privacy</h4>
-                      <p className="text-sm text-gray-500 antialiased">Your data stays private and secure</p>
                     </div>
+                    <h4 className="text-white font-semibold antialiased text-sm">Built for privacy</h4>
+                    <p className="text-xs text-gray-500 antialiased leading-relaxed">Your data stays private and secure</p>
+                  </div>
 
-                    <div>
-                      <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center mb-4">
-                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                         </svg>
                       </div>
-                      <h4 className="text-white font-semibold antialiased mb-2">No KYC required</h4>
-                      <p className="text-sm text-gray-500 antialiased">Swap without verification hassle</p>
                     </div>
+                    <h4 className="text-white font-semibold antialiased text-sm">No KYC required</h4>
+                    <p className="text-xs text-gray-500 antialiased leading-relaxed">Swap without verification</p>
+                  </div>
 
-                    <div>
-                      <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center mb-4">
-                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center">
+                        <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                         </svg>
                       </div>
-                      <h4 className="text-white font-semibold antialiased mb-2">Anonymous trading</h4>
-                      <p className="text-sm text-gray-500 antialiased">Trade with complete anonymity</p>
                     </div>
+                    <h4 className="text-white font-semibold antialiased text-sm">Anonymous trading</h4>
+                    <p className="text-xs text-gray-500 antialiased leading-relaxed">Complete anonymity</p>
                   </div>
                 </div>
 
               </div>
 
               {/* Bottom Bar */}
-              <div className="pt-8 border-t border-white/5">
-                <div className="text-center">
+              <div className="pt-8 border-t border-white/10">
+                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                   <p className="text-sm text-gray-500 antialiased">
                     © 2025 UnCrypto. All rights reserved.
                   </p>
+                  <div className="flex items-center gap-6">
+                    <Link href="/support#faq" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">FAQ</Link>
+                    <Link href="/privacy" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">Privacy</Link>
+                    <Link href="/tos" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">Terms</Link>
+                  </div>
                 </div>
               </div>
 

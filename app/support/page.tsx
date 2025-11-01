@@ -1,0 +1,398 @@
+'use client';
+
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, Mail, Clock, Shield, Zap, Users, ArrowRightLeft } from 'lucide-react';
+import Link from 'next/link';
+
+export default function SupportPage() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+  const toggleFaq = (index: number) => {
+    setOpenFaq(openFaq === index ? null : index);
+  };
+
+  const faqs = [
+    {
+      question: "How long does a swap take?",
+      answer: "Most swaps are completed within 5-30 minutes. The exact time depends on network congestion and the number of confirmations required for your selected cryptocurrencies. Bitcoin typically requires 1-3 confirmations, while Ethereum needs 12-20 confirmations for security."
+    },
+    {
+      question: "Do I need to create an account?",
+      answer: "No! Our service is completely anonymous. You don't need to register, create an account, or provide any personal information. Just enter your wallet address and start swapping. We believe in your right to privacy."
+    },
+    {
+      question: "What are the fees?",
+      answer: "We charge a flat 0.1% fee on all transactions. This is one of the lowest rates in the industry. There are no hidden fees - what you see is what you get. Network fees (gas fees) are paid separately and go directly to the blockchain miners."
+    },
+    {
+      question: "What cryptocurrencies do you support?",
+      answer: "We currently support 10+ major cryptocurrencies including Bitcoin (BTC), Ethereum (ETH), Litecoin (LTC), Ripple (XRP), Cardano (ADA), Polkadot (DOT), Dogecoin (DOGE), Solana (SOL), Polygon (MATIC), and Tether (USDT). We're constantly adding new coins based on user demand."
+    },
+    {
+      question: "Is there a minimum or maximum swap amount?",
+      answer: "Minimum amounts vary by cryptocurrency but typically start from $10 equivalent. Maximum amounts depend on our available reserves and can go up to $100,000 per transaction. For larger amounts, please contact our support team for assistance."
+    },
+    {
+      question: "What if I enter the wrong address?",
+      answer: "Cryptocurrency transactions are irreversible. Always double-check your receiving address before confirming. We recommend using the refund address field as a safety measure. If you do make a mistake, contact our support immediately - while we can't reverse blockchain transactions, we may be able to help in some cases."
+    },
+    {
+      question: "How do I track my swap?",
+      answer: "After initiating a swap, you'll receive a transaction ID and order number. You can use the transaction ID to track your swap status on the blockchain explorer for your selected cryptocurrency. We also provide real-time updates via email if you choose to provide one."
+    },
+    {
+      question: "What if my swap is delayed or stuck?",
+      answer: "If your swap takes longer than expected, it's usually due to network congestion. Check the transaction status on the blockchain explorer. Most delays resolve themselves within a few hours. If there's an issue after 24 hours, contact our support team with your order ID."
+    },
+    {
+      question: "Is my transaction secure?",
+      answer: "Yes! We use industry-standard security protocols including SSL encryption, multi-signature wallets, and cold storage for reserves. We never have access to your funds - all swaps are done through smart contracts or atomic swaps when possible."
+    },
+    {
+      question: "Can I cancel my swap?",
+      answer: "Once a swap is initiated and sent to the blockchain, it cannot be cancelled. However, if you haven't sent your funds yet, simply don't send them and the order will expire after 30 minutes. Always verify all details before sending."
+    },
+    {
+      question: "Do you offer referral bonuses?",
+      answer: "Yes! Our referral program gives you 50% off on fees for every swap you make using a referral code. Share your unique code with friends and earn rewards when they use our service."
+    },
+    {
+      question: "What countries do you serve?",
+      answer: "We serve users worldwide with some exceptions due to regulatory restrictions. Our service is currently not available in: North Korea, Iran, Syria, and certain sanctioned regions. Please check your local laws regarding cryptocurrency usage."
+    }
+  ];
+
+  const features = [
+    {
+      icon: <Zap className="w-6 h-6" />,
+      title: "Lightning Fast",
+      description: "Swaps complete in 5-30 minutes"
+    },
+    {
+      icon: <Shield className="w-6 h-6" />,
+      title: "Secure & Private",
+      description: "No KYC, no registration needed"
+    },
+    {
+      icon: <Clock className="w-6 h-6" />,
+      title: "24/7 Support",
+      description: "Always here to help you"
+    },
+    {
+      icon: <Users className="w-6 h-6" />,
+      title: "Trusted by Many",
+      description: "500K+ satisfied users"
+    }
+  ];
+
+  return (
+    <div className="min-h-screen w-full bg-black">
+      {/* Navbar */}
+      <motion.nav
+        className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/60 backdrop-blur-2xl"
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center">
+          <motion.div
+            className="flex items-center gap-2 sm:gap-3"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            <Link href="/" className="flex items-center gap-2 sm:gap-3">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 bg-white rounded-lg sm:rounded-xl flex items-center justify-center">
+                <span className="text-xl sm:text-2xl font-bold text-black">U</span>
+              </div>
+              <h1 className="text-lg sm:text-xl font-bold text-white tracking-tight antialiased">
+                UnCrypto
+              </h1>
+            </Link>
+          </motion.div>
+
+          {/* Desktop Navigation */}
+          <motion.div
+            className="hidden md:flex items-center gap-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <Link href="/" className="text-gray-400 hover:text-white transition-all text-sm font-medium px-4 py-2 rounded-lg hover:bg-white/5">
+              Swap
+            </Link>
+            <Link href="/support" className="text-white font-medium text-sm px-4 py-2 rounded-lg hover:bg-white/5">
+              Support
+            </Link>
+          </motion.div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
+            className="md:hidden w-10 h-10 flex items-center justify-center text-white hover:bg-white/5 rounded-lg transition-all"
+          >
+            {showMobileMenu ? (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {showMobileMenu && (
+            <motion.div
+              className="md:hidden border-t border-white/5 bg-black/80 backdrop-blur-xl"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <div className="container mx-auto px-4 py-4 space-y-2">
+                <Link
+                  href="/"
+                  className="block text-gray-400 hover:text-white transition-all text-sm font-medium px-4 py-3 rounded-lg hover:bg-white/5"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  Swap
+                </Link>
+                <Link
+                  href="/support"
+                  className="block text-white font-medium text-sm px-4 py-3 rounded-lg hover:bg-white/5"
+                  onClick={() => setShowMobileMenu(false)}
+                >
+                  Support
+                </Link>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
+
+      {/* Hero Section */}
+      <div className="relative pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 sm:px-6">
+        <div className="relative z-10 container mx-auto max-w-4xl text-center">
+          <motion.h1
+            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white mb-3 sm:mb-4 antialiased"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            Support Center
+          </motion.h1>
+          <motion.p
+            className="text-base sm:text-lg text-gray-400 antialiased"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            Get answers to your questions about our crypto exchange service
+          </motion.p>
+        </div>
+      </div>
+
+      {/* Features Grid */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 pb-12 sm:pb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
+          {features.map((feature, index) => (
+            <motion.div
+              key={index}
+              className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+            >
+              <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-4 text-white">
+                {feature.icon}
+              </div>
+              <h3 className="text-white font-semibold mb-2 antialiased">{feature.title}</h3>
+              <p className="text-gray-400 text-sm antialiased">{feature.description}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* FAQ Section */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            className="text-center mb-8 sm:mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+          >
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4 antialiased">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-sm sm:text-base text-gray-400 antialiased">
+              Find quick answers to common questions about our service
+            </p>
+          </motion.div>
+
+          <div className="space-y-3">
+            {faqs.map((faq, index) => (
+              <motion.div
+                key={index}
+                className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden hover:border-white/20 transition-all"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.6 + index * 0.05 }}
+              >
+                <button
+                  onClick={() => toggleFaq(index)}
+                  className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-white/5 transition-colors"
+                >
+                  <h3 className="text-sm sm:text-base text-white font-semibold pr-4 antialiased">{faq.question}</h3>
+                  <motion.div
+                    animate={{ rotate: openFaq === index ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ChevronDown className="w-5 h-5 text-white/60 flex-shrink-0" />
+                  </motion.div>
+                </button>
+
+                <AnimatePresence>
+                  {openFaq === index && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <div className="px-4 sm:px-5 pb-4 sm:pb-5 pt-0">
+                        <p className="text-sm sm:text-base text-gray-400 leading-relaxed antialiased">{faq.answer}</p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Contact Section */}
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
+        <motion.div
+          className="max-w-2xl mx-auto bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 1 }}
+        >
+          <div className="text-center mb-6 sm:mb-8">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 sm:mb-3 antialiased">
+              Still Need Help?
+            </h2>
+            <p className="text-sm sm:text-base text-gray-400 antialiased">
+              Our support team is available 24/7 to assist you with any questions or issues.
+            </p>
+          </div>
+
+          <a
+            href="mailto:support@uncrypto.com"
+            className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-xl p-6 sm:p-8 transition-all block"
+          >
+            <div className="flex items-center justify-center mb-4 sm:mb-6">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                <Mail className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
+              </div>
+            </div>
+            <div className="text-center">
+              <h3 className="text-white font-semibold mb-2 antialiased text-base sm:text-lg">Email Support</h3>
+              <p className="text-gray-400 text-sm antialiased mb-3 sm:mb-4">
+                Get help via email. We typically respond within 2-4 hours.
+              </p>
+              <div className="text-white text-sm sm:text-base font-medium antialiased">
+                support@uncrypto.com
+              </div>
+            </div>
+          </a>
+        </motion.div>
+      </div>
+
+      {/* Footer */}
+      <footer className="relative z-10 bg-black">
+        <div className="border-t border-white/5">
+          <div className="container mx-auto px-6 py-16">
+            <div className="max-w-7xl mx-auto">
+
+              {/* Main Footer Content */}
+              <div className="grid md:grid-cols-12 gap-12 mb-16">
+
+                {/* Brand - Takes more space */}
+                <div className="md:col-span-5">
+                  <div className="flex items-center gap-3 mb-5">
+                    <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center">
+                      <span className="text-2xl font-bold text-black">U</span>
+                    </div>
+                    <h3 className="text-2xl font-bold text-white antialiased">UnCrypto</h3>
+                  </div>
+                  <p className="text-gray-400 antialiased leading-relaxed mb-6 max-w-md">
+                    Fast, secure cryptocurrency exchange with real-time rates. No registration required.
+                  </p>
+                  <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-4 py-2.5">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="text-sm text-white/80 font-medium antialiased">All Services Online</span>
+                  </div>
+                </div>
+
+                {/* Features */}
+                <div className="md:col-span-7">
+                  <div className="grid sm:grid-cols-3 gap-8">
+                    <div>
+                      <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center mb-4">
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                      </div>
+                      <h4 className="text-white font-semibold antialiased mb-2">Built for privacy</h4>
+                      <p className="text-sm text-gray-500 antialiased">Your data stays private and secure</p>
+                    </div>
+
+                    <div>
+                      <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center mb-4">
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                      </div>
+                      <h4 className="text-white font-semibold antialiased mb-2">No KYC required</h4>
+                      <p className="text-sm text-gray-500 antialiased">Swap without verification hassle</p>
+                    </div>
+
+                    <div>
+                      <div className="w-10 h-10 bg-white/5 rounded-lg flex items-center justify-center mb-4">
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                        </svg>
+                      </div>
+                      <h4 className="text-white font-semibold antialiased mb-2">Anonymous trading</h4>
+                      <p className="text-sm text-gray-500 antialiased">Trade with complete anonymity</p>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Bottom Bar */}
+              <div className="pt-8 border-t border-white/5">
+                <div className="text-center">
+                  <p className="text-sm text-gray-500 antialiased">
+                    © 2025 UnCrypto. All rights reserved.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

@@ -220,7 +220,8 @@ export default function AdminDashboard() {
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-transparent antialiased cursor-pointer"
+                  className="w-full bg-black border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-white/20 antialiased cursor-pointer"
+                  style={{ colorScheme: 'dark' }}
                 >
                   <option value="">All Statuses</option>
                   <option value="open">Open</option>
@@ -237,7 +238,8 @@ export default function AdminDashboard() {
                 <select
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-transparent antialiased cursor-pointer"
+                  className="w-full bg-black border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-1 focus:ring-white/20 antialiased cursor-pointer"
+                  style={{ colorScheme: 'dark' }}
                 >
                   <option value="">All Categories</option>
                   <option value="technical">Technical</option>

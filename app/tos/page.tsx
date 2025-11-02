@@ -17,7 +17,7 @@ export default function TOSPage() {
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center">
+        <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
           <motion.div
             className="flex items-center gap-2 sm:gap-3"
             initial={{ opacity: 0, x: -20 }}
@@ -137,7 +137,7 @@ export default function TOSPage() {
             <section>
               <h2 className="text-xl sm:text-2xl font-bold text-white mb-4 antialiased">1. Acceptance of Terms</h2>
               <p className="text-sm sm:text-base text-gray-400 leading-relaxed antialiased">
-                By accessing and using UnCrypto's cryptocurrency exchange service, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to these terms, please do not use our service.
+                By accessing and using UnCrypto&apos;s cryptocurrency exchange service, you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to these terms, please do not use our service.
               </p>
             </section>
 
@@ -309,6 +309,7 @@ export default function TOSPage() {
                   </p>
                   <div className="flex items-center gap-6">
                     <Link href="/support#faq" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">FAQ</Link>
+                    <Link href="/tickets" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">Support Tickets</Link>
                     <Link href="/privacy" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">Privacy</Link>
                     <Link href="/tos" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">Terms</Link>
                   </div>

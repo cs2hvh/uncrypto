@@ -17,7 +17,7 @@ export default function PrivacyPage() {
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center">
+        <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
           <motion.div
             className="flex items-center gap-2 sm:gap-3"
             initial={{ opacity: 0, x: -20 }}
@@ -340,6 +340,7 @@ export default function PrivacyPage() {
                   </p>
                   <div className="flex items-center gap-6">
                     <Link href="/support#faq" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">FAQ</Link>
+                    <Link href="/tickets" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">Support Tickets</Link>
                     <Link href="/privacy" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">Privacy</Link>
                     <Link href="/tos" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">Terms</Link>
                   </div>

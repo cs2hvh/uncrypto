@@ -96,7 +96,7 @@ export default function SupportPage() {
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center">
+        <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
           <motion.div
             className="flex items-center gap-2 sm:gap-3"
             initial={{ opacity: 0, x: -20 }}
@@ -134,7 +134,7 @@ export default function SupportPage() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="md:hidden w-10 h-10 flex items-center justify-center text-white hover:bg-white/5 rounded-lg transition-all"
+            className="md:hidden w-10 h-10 flex items-center justify-center text-white hover:bg-white/5 rounded-lg transition-all cursor-pointer"
           >
             {showMobileMenu ? (
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -187,7 +187,7 @@ export default function SupportPage() {
       </motion.nav>
 
       {/* Hero Section */}
-      <div className="relative pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 sm:px-6">
+      <div className="relative pt-20 sm:pt-24 pb-8 sm:pb-12 px-4 sm:px-6">
         <div className="relative z-10 container mx-auto max-w-4xl text-center">
           <motion.h1
             className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white mb-3 sm:mb-4 antialiased"
@@ -208,25 +208,110 @@ export default function SupportPage() {
         </div>
       </div>
 
-      {/* Features Grid */}
+      {/* Ticket System - AT TOP */}
       <div className="relative z-10 container mx-auto px-4 sm:px-6 pb-12 sm:pb-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
-          {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl p-6 hover:border-white/20 transition-all"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
+        <motion.div
+          className="max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <div className="text-center mb-6">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 antialiased">
+              Need Help?
+            </h2>
+            <p className="text-base text-gray-400 antialiased">
+              Choose your preferred support method
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Create Ticket */}
+            <Link
+              href="/tickets/new"
+              className="group relative bg-gradient-to-br from-white/10 to-white/5 hover:from-white/15 hover:to-white/10 border border-white/20 hover:border-white/30 rounded-lg overflow-hidden transition-all block"
             >
-              <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-4 text-white">
-                {feature.icon}
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative p-10">
+                <div className="flex items-center justify-center mb-8">
+                  <div className="w-20 h-20 bg-white/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <h3 className="text-white font-bold mb-3 antialiased text-xl">Create New Ticket</h3>
+                  <p className="text-gray-400 text-sm antialiased mb-6 leading-relaxed">
+                    Submit a detailed support request. Get a unique ticket ID to track your issue and communicate with our team.
+                  </p>
+                  <div className="inline-flex items-center gap-2 text-white text-sm font-semibold bg-white/10 px-4 py-2 rounded-lg group-hover:bg-white/20 transition-colors">
+                    <span>Get Started</span>
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
               </div>
-              <h3 className="text-white font-semibold mb-2 antialiased">{feature.title}</h3>
-              <p className="text-gray-400 text-sm antialiased">{feature.description}</p>
-            </motion.div>
-          ))}
-        </div>
+            </Link>
+
+            {/* Access Existing Ticket */}
+            <Link
+              href="/tickets"
+              className="group relative bg-black/40 hover:bg-black/50 border border-white/10 hover:border-white/20 rounded-lg overflow-hidden transition-all block"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative p-10">
+                <div className="flex items-center justify-center mb-8">
+                  <div className="w-20 h-20 bg-white/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <h3 className="text-white font-bold mb-3 antialiased text-xl">Access Your Ticket</h3>
+                  <p className="text-gray-400 text-sm antialiased mb-6 leading-relaxed">
+                    Have a ticket ID? Continue your conversation, check status updates, and add new messages.
+                  </p>
+                  <div className="inline-flex items-center gap-2 text-white text-sm font-semibold bg-white/10 px-4 py-2 rounded-lg group-hover:bg-white/20 transition-colors">
+                    <span>Find Ticket</span>
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            {/* Email Support */}
+            <a
+              href="mailto:support@uncrypto.com"
+              className="group relative bg-black/40 hover:bg-black/50 border border-white/10 hover:border-white/20 rounded-lg overflow-hidden transition-all block"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <div className="relative p-10">
+                <div className="flex items-center justify-center mb-8">
+                  <div className="w-20 h-20 bg-white/10 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Mail className="w-10 h-10 text-white" />
+                  </div>
+                </div>
+                <div className="text-center">
+                  <h3 className="text-white font-bold mb-3 antialiased text-xl">Email Support</h3>
+                  <p className="text-gray-400 text-sm antialiased mb-6 leading-relaxed">
+                    Prefer traditional email? Reach out directly and we'll respond within 2-4 hours.
+                  </p>
+                  <div className="inline-flex items-center gap-2 text-white text-sm font-semibold bg-white/10 px-4 py-2 rounded-lg group-hover:bg-white/20 transition-colors">
+                    <span>Send Email</span>
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </motion.div>
       </div>
 
       {/* FAQ Section */}
@@ -257,7 +342,7 @@ export default function SupportPage() {
               >
                 <button
                   onClick={() => toggleFaq(index)}
-                  className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-white/5 transition-colors"
+                  className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-white/5 transition-colors cursor-pointer"
                 >
                   <h3 className="text-sm sm:text-base text-white font-semibold pr-4 antialiased">{faq.question}</h3>
                   <motion.div
@@ -288,44 +373,6 @@ export default function SupportPage() {
         </div>
       </div>
 
-      {/* Contact Section */}
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
-        <motion.div
-          className="max-w-2xl mx-auto bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1 }}
-        >
-          <div className="text-center mb-6 sm:mb-8">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 sm:mb-3 antialiased">
-              Still Need Help?
-            </h2>
-            <p className="text-sm sm:text-base text-gray-400 antialiased">
-              Our support team is available 24/7 to assist you with any questions or issues.
-            </p>
-          </div>
-
-          <a
-            href="mailto:support@uncrypto.com"
-            className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 rounded-xl p-6 sm:p-8 transition-all block"
-          >
-            <div className="flex items-center justify-center mb-4 sm:mb-6">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Mail className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
-              </div>
-            </div>
-            <div className="text-center">
-              <h3 className="text-white font-semibold mb-2 antialiased text-base sm:text-lg">Email Support</h3>
-              <p className="text-gray-400 text-sm antialiased mb-3 sm:mb-4">
-                Get help via email. We typically respond within 2-4 hours.
-              </p>
-              <div className="text-white text-sm sm:text-base font-medium antialiased">
-                support@uncrypto.com
-              </div>
-            </div>
-          </a>
-        </motion.div>
-      </div>
 
       {/* Footer */}
       <footer className="relative z-10 bg-black/60 backdrop-blur-xl">
@@ -402,6 +449,7 @@ export default function SupportPage() {
                   </p>
                   <div className="flex items-center gap-6">
                     <Link href="/support#faq" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">FAQ</Link>
+                    <Link href="/tickets" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">Support Tickets</Link>
                     <Link href="/privacy" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">Privacy</Link>
                     <Link href="/tos" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">Terms</Link>
                   </div>

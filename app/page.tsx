@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 export default function Home() {
   const [fromCurrency, setFromCurrency] = useState('BTC');
-  const [toCurrency, setToCurrency] = useState('ETH');
+  const [toCurrency, setToCurrency] = useState('XMR');
   const [fromAmount, setFromAmount] = useState('');
   const [toAmount, setToAmount] = useState('');
   const [rates, setRates] = useState<Record<string, number>>({});
@@ -20,8 +20,35 @@ export default function Home() {
   const [showFromDropdown, setShowFromDropdown] = useState(false);
   const [showToDropdown, setShowToDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [amountError, setAmountError] = useState('');
   const fromDropdownRef = useRef<HTMLDivElement>(null);
   const toDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Reserve amounts (in coins)
+  const reserves: Record<string, number> = {
+    XMR: 450.5,
+    BTC: 12.5,
+    LTC: 850,
+    DASH: 1200,
+    ETH: 250.8,
+    'USDT-TRC20': 500000,
+    'USDT-ERC20': 500000,
+  };
+
+  // Get min/max limits based on reserves
+  const getMinAmount = (currency: string): number => {
+    // Minimum ~$10 USD equivalent
+    const minUsd = 10;
+    if (rates[currency] && rates[currency] > 0) {
+      return minUsd / rates[currency];
+    }
+    return 0.001;
+  };
+
+  const getMaxAmount = (currency: string): number => {
+    // Max is 80% of reserves to maintain liquidity
+    return reserves[currency] ? reserves[currency] * 0.8 : 0;
+  };
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -42,34 +69,28 @@ export default function Home() {
   const fetchRates = async () => {
     try {
       const response = await fetch(
-        'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,litecoin,ripple,cardano,polkadot,dogecoin,solana,matic-network,tether&vs_currencies=usd&include_24hr_change=true'
+        'https://api.coingecko.com/api/v3/simple/price?ids=monero,bitcoin,litecoin,dash,ethereum,tether&vs_currencies=usd&include_24hr_change=true'
       );
       const data = await response.json();
-      
+
       const ratesMap: Record<string, number> = {
+        XMR: data.monero?.usd || 0,
         BTC: data.bitcoin?.usd || 0,
-        ETH: data.ethereum?.usd || 0,
         LTC: data.litecoin?.usd || 0,
-        XRP: data.ripple?.usd || 0,
-        ADA: data.cardano?.usd || 0,
-        DOT: data.polkadot?.usd || 0,
-        DOGE: data.dogecoin?.usd || 0,
-        SOL: data.solana?.usd || 0,
-        MATIC: data['matic-network']?.usd || 0,
-        USDT: data.tether?.usd || 1,
+        DASH: data.dash?.usd || 0,
+        ETH: data.ethereum?.usd || 0,
+        'USDT-TRC20': data.tether?.usd || 1,
+        'USDT-ERC20': data.tether?.usd || 1,
       };
 
       const changesMap: Record<string, number> = {
+        XMR: data.monero?.usd_24h_change || 0,
         BTC: data.bitcoin?.usd_24h_change || 0,
-        ETH: data.ethereum?.usd_24h_change || 0,
         LTC: data.litecoin?.usd_24h_change || 0,
-        XRP: data.ripple?.usd_24h_change || 0,
-        ADA: data.cardano?.usd_24h_change || 0,
-        DOT: data.polkadot?.usd_24h_change || 0,
-        DOGE: data.dogecoin?.usd_24h_change || 0,
-        SOL: data.solana?.usd_24h_change || 0,
-        MATIC: data['matic-network']?.usd_24h_change || 0,
-        USDT: data.tether?.usd_24h_change || 0,
+        DASH: data.dash?.usd_24h_change || 0,
+        ETH: data.ethereum?.usd_24h_change || 0,
+        'USDT-TRC20': data.tether?.usd_24h_change || 0,
+        'USDT-ERC20': data.tether?.usd_24h_change || 0,
       };
       
       setRates(ratesMap);
@@ -89,9 +110,21 @@ export default function Home() {
 
   // Calculate conversion when fromAmount or currencies change
   useEffect(() => {
+    setAmountError('');
+
     if (fromAmount && rates[fromCurrency] && rates[toCurrency]) {
       const fromValue = parseFloat(fromAmount);
       if (!isNaN(fromValue)) {
+        // Check min/max limits
+        const minAmount = getMinAmount(fromCurrency);
+        const maxAmount = getMaxAmount(fromCurrency);
+
+        if (fromValue < minAmount) {
+          setAmountError(`Minimum: ${minAmount.toFixed(8)} ${fromCurrency}`);
+        } else if (fromValue > maxAmount) {
+          setAmountError(`Maximum: ${maxAmount.toFixed(8)} ${fromCurrency}`);
+        }
+
         const fromUsd = fromValue * rates[fromCurrency];
         const toValue = fromUsd / rates[toCurrency];
         setToAmount(toValue.toFixed(8));
@@ -110,29 +143,26 @@ export default function Home() {
 
   // Get available currencies for "To" dropdown (excluding "From" currency)
   const getAvailableToCurrencies = () => {
-    const allCurrencies = ['BTC', 'ETH', 'LTC', 'XRP', 'ADA', 'DOT', 'DOGE', 'SOL', 'MATIC', 'USDT'];
+    const allCurrencies = ['XMR', 'BTC', 'LTC', 'DASH', 'ETH', 'USDT-TRC20', 'USDT-ERC20'];
     return allCurrencies.filter(currency => currency !== fromCurrency);
   };
 
   // Get available currencies for "From" dropdown (excluding "To" currency)
   const getAvailableFromCurrencies = () => {
-    const allCurrencies = ['BTC', 'ETH', 'LTC', 'XRP', 'ADA', 'DOT', 'DOGE', 'SOL', 'MATIC', 'USDT'];
+    const allCurrencies = ['XMR', 'BTC', 'LTC', 'DASH', 'ETH', 'USDT-TRC20', 'USDT-ERC20'];
     return allCurrencies.filter(currency => currency !== toCurrency);
   };
 
   // Get full crypto name
   const getCryptoName = (currency: string) => {
     const names: Record<string, string> = {
+      XMR: 'Monero',
       BTC: 'Bitcoin',
-      ETH: 'Ethereum',
       LTC: 'Litecoin',
-      XRP: 'Ripple',
-      ADA: 'Cardano',
-      DOT: 'Polkadot',
-      DOGE: 'Dogecoin',
-      SOL: 'Solana',
-      MATIC: 'Polygon',
-      USDT: 'Tether',
+      DASH: 'Dash',
+      ETH: 'Ethereum',
+      'USDT-TRC20': 'Tether (TRC20)',
+      'USDT-ERC20': 'Tether (ERC20)',
     };
     return names[currency] || currency;
   };
@@ -158,16 +188,13 @@ export default function Home() {
   // Get crypto icon - using cryptocurrency-icons CDN (jsdelivr)
   const getCryptoIcon = (currency: string) => {
     const symbols: Record<string, string> = {
+      XMR: 'xmr',
       BTC: 'btc',
-      ETH: 'eth',
       LTC: 'ltc',
-      XRP: 'xrp',
-      ADA: 'ada',
-      DOT: 'dot',
-      DOGE: 'doge',
-      SOL: 'sol',
-      MATIC: 'matic',
-      USDT: 'usdt',
+      DASH: 'dash',
+      ETH: 'eth',
+      'USDT-TRC20': 'usdt',
+      'USDT-ERC20': 'usdt',
     };
     const symbol = symbols[currency] || 'btc';
     return `https://cdn.jsdelivr.net/npm/cryptocurrency-icons@0.18.1/svg/color/${symbol}.svg`;
@@ -182,7 +209,7 @@ export default function Home() {
         animate={{ y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center">
+        <div className="container mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
           {/* Logo */}
           <motion.div
             className="flex items-center gap-2 sm:gap-3"
@@ -219,7 +246,7 @@ export default function Home() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setShowMobileMenu(!showMobileMenu)}
-            className="md:hidden w-10 h-10 flex items-center justify-center text-white hover:bg-white/5 rounded-lg transition-all"
+            className="md:hidden w-10 h-10 flex items-center justify-center text-white hover:bg-white/5 rounded-lg transition-all cursor-pointer"
           >
             {showMobileMenu ? (
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -304,19 +331,39 @@ export default function Home() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                Swap Crypto
+                Automated
                 <br />
-                <span className="text-gray-300">Instantly</span>
+                <span className="text-gray-300">Crypto Exchange</span>
               </motion.h1>
 
               <motion.p
-                className="text-base sm:text-lg text-gray-400 leading-relaxed max-w-xl mx-auto lg:mx-0"
+                className="text-base sm:text-lg text-gray-400 leading-relaxed max-w-xl mx-auto lg:mx-0 mb-6"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                Fast, secure cryptocurrency exchange with <span className="text-gray-300">real-time rates</span>. No registration required.
+                Fully automated cryptocurrency swaps with instant execution. Exchange between major privacy coins and stablecoins in seconds.
               </motion.p>
+
+              <motion.div
+                className="flex flex-wrap gap-3 justify-center lg:justify-start"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+              >
+                <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-3 py-2">
+                  <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
+                  <span className="text-xs text-gray-300 antialiased">No Registration</span>
+                </div>
+                <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-3 py-2">
+                  <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
+                  <span className="text-xs text-gray-300 antialiased">Instant Processing</span>
+                </div>
+                <div className="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-3 py-2">
+                  <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
+                  <span className="text-xs text-gray-300 antialiased">24/7 Automated</span>
+                </div>
+              </motion.div>
             </div>
 
           </motion.div>
@@ -327,8 +374,22 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
+            style={{
+              transformStyle: 'preserve-3d',
+              perspective: '1000px',
+            }}
           >
-            <div className="relative bg-black/40 backdrop-blur-2xl border border-white/10 rounded-2xl sm:rounded-3xl p-4 sm:p-5 shadow-2xl overflow-hidden">
+            <motion.div
+              className="relative bg-black/60 backdrop-blur-2xl border border-white/20 rounded-2xl sm:rounded-3xl p-4 sm:p-5 overflow-hidden"
+              style={{
+                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                transform: 'translateZ(50px)',
+              }}
+              whileHover={{
+                y: -5,
+                transition: { duration: 0.3 }
+              }}
+            >
               {/* Subtle Animated Background */}
               <motion.div
                 className="absolute inset-0 opacity-10"
@@ -396,7 +457,7 @@ export default function Home() {
                                     setFromCurrency(currency);
                                     setShowFromDropdown(false);
                                   }}
-                                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-all"
+                                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-all cursor-pointer"
                                 >
                                   <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center p-1.5">
                                     <Image
@@ -421,9 +482,22 @@ export default function Home() {
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center justify-between pt-2 border-t border-white/10">
-                      <span className="text-xs font-medium text-white/40">USD Value</span>
-                      <span className="text-xs font-semibold text-white/70">${getUsdValue(fromAmount, fromCurrency)}</span>
+                    <div className="pt-2 border-t border-white/10 space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-medium text-white/40">USD Value</span>
+                        <span className="text-xs font-semibold text-white/70">${getUsdValue(fromAmount, fromCurrency)}</span>
+                      </div>
+                      {rates[fromCurrency] && (
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-medium text-white/40">Limits</span>
+                          <span className="text-xs text-white/60 antialiased">
+                            {getMinAmount(fromCurrency).toFixed(8)} - {getMaxAmount(fromCurrency).toFixed(8)} {fromCurrency}
+                          </span>
+                        </div>
+                      )}
+                      {amountError && (
+                        <div className="text-xs text-red-400 antialiased pt-1">{amountError}</div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -432,7 +506,7 @@ export default function Home() {
                 <div className="flex justify-center -my-0.5 relative z-10">
                   <button
                     onClick={handleSwap}
-                    className="bg-white/10 hover:bg-white/20 border border-white/10 active:scale-95 p-2 rounded-full transition-all group"
+                    className="bg-white/10 hover:bg-white/20 border border-white/10 active:scale-95 p-2 rounded-full transition-all group cursor-pointer"
                   >
                     <ArrowRightLeft className="w-3.5 h-3.5 text-white group-hover:rotate-180 transition-transform duration-300" />
                   </button>
@@ -482,7 +556,7 @@ export default function Home() {
                                     setToCurrency(currency);
                                     setShowToDropdown(false);
                                   }}
-                                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-all"
+                                  className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/10 transition-all cursor-pointer"
                                 >
                                   <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center p-1.5">
                                     <Image
@@ -507,9 +581,11 @@ export default function Home() {
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center justify-between pt-2 border-t border-white/10">
-                      <span className="text-xs font-medium text-white/40">USD Value</span>
-                      <span className="text-xs font-semibold text-white/70">${getUsdValue(toAmount, toCurrency)}</span>
+                    <div className="pt-2 border-t border-white/10">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-medium text-white/40">USD Value</span>
+                        <span className="text-xs font-semibold text-white/70">${getUsdValue(toAmount, toCurrency)}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -545,7 +621,7 @@ export default function Home() {
                   {!showReferralCode ? (
                     <button
                       onClick={() => setShowReferralCode(true)}
-                      className="text-xs text-white/50 hover:text-white/70 font-medium transition-colors flex items-center gap-1 antialiased"
+                      className="text-xs text-white/50 hover:text-white/70 font-medium transition-colors flex items-center gap-1 antialiased cursor-pointer"
                     >
                       <span>Have a referral code?</span>
                       <span className="text-white/60 font-semibold">Get 50% off!</span>
@@ -578,19 +654,27 @@ export default function Home() {
                   </div>
                 </div>
 
+                {/* Fee Display */}
+                <div className="bg-white/5 border border-white/10 rounded-xl p-3.5 mb-4">
+                  <div className="flex items-center justify-between antialiased">
+                    <span className="text-white/50 font-medium text-sm">Exchange Fee</span>
+                    <span className="text-white font-semibold text-sm">2.00%</span>
+                  </div>
+                </div>
+
                 {/* Exchange Button */}
                 <button
-                  disabled={!receivingAddress.trim()}
+                  disabled={!receivingAddress.trim() || !!amountError || !fromAmount}
                   className={`w-full py-3.5 rounded-xl transition-all text-base font-semibold shadow-lg ${
-                    receivingAddress.trim()
-                      ? 'bg-white hover:bg-white/90 text-black shadow-white/10 active:scale-[0.98]'
+                    receivingAddress.trim() && !amountError && fromAmount
+                      ? 'bg-white hover:bg-white/90 text-black shadow-white/10 active:scale-[0.98] cursor-pointer'
                       : 'bg-white/10 text-white/40 cursor-not-allowed shadow-none'
                   }`}
                 >
-                  Exchange Now
+                  Exchange
                 </button>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
 
         </div>
@@ -609,18 +693,16 @@ export default function Home() {
           </div>
 
           {/* Reserves Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {Object.entries(rates).map(([currency], index) => {
               // Mock reserve amounts - replace with actual data
-              const reserveAmount = currency === 'BTC' ? '12.5' :
-                                   currency === 'ETH' ? '250.8' :
-                                   currency === 'USDT' ? '500,000' :
-                                   currency === 'SOL' ? '1,200' :
+              const reserveAmount = currency === 'XMR' ? '450.5' :
+                                   currency === 'BTC' ? '12.5' :
                                    currency === 'LTC' ? '850' :
-                                   currency === 'XRP' ? '75,000' :
-                                   currency === 'ADA' ? '120,000' :
-                                   currency === 'DOT' ? '5,400' :
-                                   currency === 'DOGE' ? '500,000' :
+                                   currency === 'DASH' ? '1,200' :
+                                   currency === 'ETH' ? '250.8' :
+                                   currency === 'USDT-TRC20' ? '500,000' :
+                                   currency === 'USDT-ERC20' ? '500,000' :
                                    '10,000';
 
               return (
@@ -632,19 +714,6 @@ export default function Home() {
                   transition={{ duration: 0.4, delay: index * 0.05 }}
                 >
                   <div className="relative">
-                    {/* Price Change Badge */}
-                    {priceChanges[currency] !== undefined && (
-                      <div className="absolute -top-2 -right-2">
-                        <div className={`text-[10px] font-bold px-2 py-1 rounded-lg ${
-                          priceChanges[currency] >= 0
-                            ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                            : 'bg-red-500/20 text-red-400 border border-red-500/30'
-                        }`}>
-                          {priceChanges[currency] >= 0 ? '+' : ''}{priceChanges[currency].toFixed(1)}%
-                        </div>
-                      </div>
-                    )}
-
                     {/* Crypto Icon - Centered */}
                     <div className="flex items-center justify-center mb-4">
                       <div className="w-12 h-12 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -704,11 +773,11 @@ export default function Home() {
 
               <div className="space-y-2.5">
                 {[
-                  { from: 'BTC', to: 'ETH' },
-                  { from: 'ETH', to: 'USDT' },
-                  { from: 'BTC', to: 'USDT' },
-                  { from: 'SOL', to: 'ETH' },
-                  { from: 'USDT', to: 'BTC' },
+                  { from: 'BTC', to: 'XMR' },
+                  { from: 'ETH', to: 'BTC' },
+                  { from: 'XMR', to: 'USDT-TRC20' },
+                  { from: 'DASH', to: 'BTC' },
+                  { from: 'LTC', to: 'ETH' },
                 ].map((swap, index) => {
                   const rate = rates[swap.from] && rates[swap.to]
                     ? (rates[swap.from] / rates[swap.to]).toFixed(6)
@@ -799,15 +868,15 @@ export default function Home() {
 
               <div className="space-y-2.5">
                 {[
-                  { from: 'ETH', to: 'BTC', volume: '2.4M', trend: '+12.5%', rank: 1 },
-                  { from: 'BTC', to: 'USDT', volume: '1.8M', trend: '+8.3%', rank: 2 },
-                  { from: 'USDT', to: 'ETH', volume: '1.2M', trend: '+15.7%', rank: 3 },
-                  { from: 'SOL', to: 'USDT', volume: '890K', trend: '+5.2%', rank: 4 },
-                  { from: 'XRP', to: 'BTC', volume: '650K', trend: '+3.8%', rank: 5 },
+                  { from: 'BTC', to: 'XMR', volume: '2.4M', trend: '+12.5%', rank: 1 },
+                  { from: 'ETH', to: 'BTC', volume: '1.8M', trend: '+8.3%', rank: 2 },
+                  { from: 'XMR', to: 'USDT-TRC20', volume: '1.2M', trend: '+15.7%', rank: 3 },
+                  { from: 'DASH', to: 'BTC', volume: '890K', trend: '+5.2%', rank: 4 },
+                  { from: 'LTC', to: 'ETH', volume: '650K', trend: '+3.8%', rank: 5 },
                 ].map((swap, index) => (
                   <motion.button
                     key={index}
-                    className="w-full bg-black/30 hover:bg-black/50 border border-white/10 hover:border-white/30 rounded-lg sm:rounded-xl p-3 sm:p-4 transition-all group relative overflow-hidden"
+                    className="w-full bg-black/30 hover:bg-black/50 border border-white/10 hover:border-white/30 rounded-lg sm:rounded-xl p-3 sm:p-4 transition-all group relative overflow-hidden cursor-pointer"
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: index * 0.08 }}
@@ -950,6 +1019,7 @@ export default function Home() {
                   </p>
                   <div className="flex items-center gap-6">
                     <Link href="/support#faq" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">FAQ</Link>
+                    <Link href="/tickets" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">Support Tickets</Link>
                     <Link href="/privacy" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">Privacy</Link>
                     <Link href="/tos" className="text-sm text-gray-500 hover:text-white transition-colors antialiased cursor-pointer">Terms</Link>
                   </div>

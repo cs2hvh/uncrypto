@@ -6,26 +6,12 @@ import type { TicketCategory } from '@/types/ticket';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { category, subject, message } = body;
+    const { message } = body;
 
     // Validation
-    if (!category || !subject || !message) {
+    if (!message) {
       return NextResponse.json(
-        { error: 'Category, subject, and message are required' },
-        { status: 400 }
-      );
-    }
-
-    if (!['technical', 'billing', 'sales', 'other'].includes(category)) {
-      return NextResponse.json(
-        { error: 'Invalid category' },
-        { status: 400 }
-      );
-    }
-
-    if (subject.trim().length === 0 || subject.length > 255) {
-      return NextResponse.json(
-        { error: 'Subject must be between 1 and 255 characters' },
+        { error: 'Message is required' },
         { status: 400 }
       );
     }
@@ -39,6 +25,12 @@ export async function POST(request: NextRequest) {
 
     // Generate unique ticket ID
     const ticketId = generateTicketId();
+
+    // Default category for all tickets
+    const category = 'technical';
+
+    // Auto-generate subject from ticket ID
+    const subject = `Support Request - ${ticketId}`;
 
     // Start transaction
     const connection = await db.getConnection();

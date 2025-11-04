@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Search, AlertCircle, Plus, ArrowRight } from 'lucide-react';
+import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 export default function TicketsPage() {
   const router = useRouter();
@@ -53,9 +55,13 @@ export default function TicketsPage() {
       >
         <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2 sm:gap-3">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-lg flex items-center justify-center">
-              <span className="text-lg sm:text-xl font-bold text-black">U</span>
-            </div>
+            <Image
+              src="/uncryptologo.png"
+              alt="UnCrypto Logo"
+              width={36}
+              height={36}
+              className="w-8 h-8 sm:w-9 sm:h-9"
+            />
             <h1 className="text-lg sm:text-xl font-bold text-white tracking-tight antialiased">UnCrypto</h1>
           </Link>
           <Link href="/support" className="text-gray-400 hover:text-white transition-all text-sm font-medium px-4 py-2 rounded-lg hover:bg-white/5 cursor-pointer">
@@ -246,6 +252,8 @@ export default function TicketsPage() {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

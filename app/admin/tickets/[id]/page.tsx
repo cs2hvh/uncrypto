@@ -9,6 +9,8 @@ import type { TicketWithMessages, Message } from '@/types/ticket';
 import { formatTimestamp, formatDate } from '@/lib/ticket-utils';
 import RichTextEditor from '@/components/RichTextEditor';
 import { toast } from 'sonner';
+import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 export default function AdminTicketPage() {
   const router = useRouter();
@@ -254,13 +256,6 @@ export default function AdminTicketPage() {
                 <div className="h-4 w-px bg-white/10"></div>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500 antialiased">Category:</span>
-                  <span className="text-sm font-medium text-white antialiased capitalize">{ticket.category}</span>
-                </div>
-
-                <div className="h-4 w-px bg-white/10"></div>
-
-                <div className="flex items-center gap-2">
                   <span className="text-xs text-gray-500 antialiased">Priority:</span>
                   <span className={`inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-md ${
                     ticket.priority === 'urgent' ? 'bg-red-500/10 text-red-400 border border-red-500/20' :
@@ -463,6 +458,8 @@ export default function AdminTicketPage() {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

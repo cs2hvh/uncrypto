@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Lock } from 'lucide-react';
+import Image from 'next/image';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -46,9 +47,13 @@ export default function AdminLoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-              <span className="text-lg font-bold text-black">U</span>
-            </div>
+            <Image
+              src="/uncryptologo.png"
+              alt="UnCrypto Logo"
+              width={40}
+              height={40}
+              className="w-10 h-10"
+            />
             <span className="text-xl font-semibold text-white antialiased">UnCrypto</span>
           </Link>
           <h1 className="text-2xl font-semibold text-white mb-1 antialiased">Admin Portal</h1>

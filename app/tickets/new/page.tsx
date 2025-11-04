@@ -5,26 +5,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { AlertCircle, CheckCircle2, Copy, Check } from 'lucide-react';
-import type { TicketCategory } from '@/types/ticket';
 import { toast } from 'sonner';
+import Footer from '@/components/Footer';
+import Image from 'next/image';
+import RichTextEditor from '@/components/RichTextEditor';
 
 export default function NewTicketPage() {
   const router = useRouter();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [category, setCategory] = useState<TicketCategory>('technical');
-  const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [ticketCreated, setTicketCreated] = useState(false);
   const [ticketId, setTicketId] = useState('');
   const [copied, setCopied] = useState(false);
-
-  const categories = [
-    { value: 'technical' as TicketCategory, label: 'Technical Support', desc: 'Platform issues, bugs, or technical problems' },
-    { value: 'billing' as TicketCategory, label: 'Billing & Payments', desc: 'Fee inquiries, refunds, or payment issues' },
-    { value: 'sales' as TicketCategory, label: 'Sales & Partnerships', desc: 'Business inquiries or collaboration requests' },
-    { value: 'other' as TicketCategory, label: 'General Inquiry', desc: 'Other questions or feedback' },
-  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +27,7 @@ export default function NewTicketPage() {
       const response = await fetch('/api/tickets/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ category, subject, message }),
+        body: JSON.stringify({ message }),
       });
 
       const data = await response.json();
@@ -66,9 +59,13 @@ export default function NewTicketPage() {
         <motion.nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/60 backdrop-blur-2xl">
           <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center">
             <Link href="/" className="flex items-center gap-2 sm:gap-3">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-lg flex items-center justify-center">
-                <span className="text-lg sm:text-xl font-bold text-black">U</span>
-              </div>
+              <Image
+                src="/uncryptologo.png"
+                alt="UnCrypto Logo"
+                width={36}
+                height={36}
+                className="w-8 h-8 sm:w-9 sm:h-9"
+              />
               <h1 className="text-lg sm:text-xl font-bold text-white tracking-tight antialiased">UnCrypto</h1>
             </Link>
           </div>
@@ -117,6 +114,8 @@ export default function NewTicketPage() {
             </div>
           </div>
         </div>
+
+        <Footer />
       </div>
     );
   }
@@ -127,9 +126,13 @@ export default function NewTicketPage() {
       <motion.nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/60 backdrop-blur-2xl" initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.6 }}>
         <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2 sm:gap-3">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-lg flex items-center justify-center">
-              <span className="text-lg sm:text-xl font-bold text-black">U</span>
-            </div>
+            <Image
+              src="/uncryptologo.png"
+              alt="UnCrypto Logo"
+              width={36}
+              height={36}
+              className="w-8 h-8 sm:w-9 sm:h-9"
+            />
             <h1 className="text-lg sm:text-xl font-bold text-white tracking-tight antialiased">UnCrypto</h1>
           </Link>
           <Link href="/tickets" className="text-gray-400 hover:text-white transition-all text-sm font-medium px-4 py-2 rounded-lg hover:bg-white/5 cursor-pointer">
@@ -147,51 +150,13 @@ export default function NewTicketPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Category */}
-            <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-lg p-6">
-              <label className="block text-sm font-medium text-white mb-3 antialiased">Category</label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value as TicketCategory)}
-                className="w-full bg-black border border-white/10 rounded px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-transparent antialiased cursor-pointer"
-                style={{ colorScheme: 'dark' }}
-              >
-                {categories.map((cat) => (
-                  <option key={cat.value} value={cat.value}>
-                    {cat.label}
-                  </option>
-                ))}
-              </select>
-              <p className="text-xs text-gray-500 mt-2 antialiased">
-                {categories.find(c => c.value === category)?.desc}
-              </p>
-            </div>
-
-            {/* Subject */}
-            <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-lg p-6">
-              <label className="block text-sm font-medium text-white mb-3 antialiased">Subject</label>
-              <input
-                type="text"
-                value={subject}
-                onChange={(e) => setSubject(e.target.value)}
-                placeholder="Brief summary of your issue"
-                required
-                maxLength={255}
-                className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-transparent antialiased"
-              />
-              <p className="text-xs text-gray-500 mt-2 antialiased">{subject.length}/255 characters</p>
-            </div>
-
             {/* Message with Rich Text Editor */}
             <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-lg p-6">
-              <label className="block text-sm font-medium text-white mb-3 antialiased">Description</label>
-              <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Please provide detailed information about your issue. Include any relevant error messages, steps to reproduce, or screenshots."
-                required
-                rows={10}
-                className="w-full bg-white/5 border border-white/10 rounded px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-white/20 focus:border-transparent resize-none antialiased"
+              <label className="block text-sm font-medium text-white mb-3 antialiased">Your Message</label>
+              <RichTextEditor
+                content={message}
+                onChange={setMessage}
+                placeholder="Please provide detailed information about your issue. Include any relevant error messages, steps to reproduce, or other details that will help us assist you."
               />
               <p className="text-xs text-gray-500 mt-2 antialiased">Provide as much detail as possible to help us resolve your issue quickly</p>
             </div>
@@ -203,9 +168,9 @@ export default function NewTicketPage() {
               </Link>
               <button
                 type="submit"
-                disabled={isSubmitting || !subject.trim() || !message.trim()}
+                disabled={isSubmitting || !message.trim()}
                 className={`px-6 py-2.5 text-sm font-medium rounded transition-all antialiased ${
-                  isSubmitting || !subject.trim() || !message.trim()
+                  isSubmitting || !message.trim()
                     ? 'bg-white/10 text-white/40 cursor-not-allowed'
                     : 'bg-white text-black hover:bg-white/90 cursor-pointer'
                 }`}
@@ -216,6 +181,8 @@ export default function NewTicketPage() {
           </form>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

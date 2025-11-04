@@ -217,9 +217,13 @@ export default function Home() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
           >
-            <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-lg flex items-center justify-center">
-              <span className="text-lg sm:text-xl font-bold text-black">U</span>
-            </div>
+            <Image
+              src="/uncryptologo.png"
+              alt="UnCrypto Logo"
+              width={36}
+              height={36}
+              className="w-8 h-8 sm:w-9 sm:h-9"
+            />
             <h1 className="text-lg sm:text-xl font-bold text-white tracking-tight antialiased">
               UnCrypto
             </h1>
@@ -621,10 +625,15 @@ export default function Home() {
                   {!showReferralCode ? (
                     <button
                       onClick={() => setShowReferralCode(true)}
-                      className="text-xs text-white/50 hover:text-white/70 font-medium transition-colors flex items-center gap-1 antialiased cursor-pointer"
+                      className="text-xs font-medium transition-colors flex items-center gap-1.5 antialiased cursor-pointer bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-400 px-3 py-2 rounded-lg w-full justify-between"
                     >
-                      <span>Have a referral code?</span>
-                      <span className="text-white/60 font-semibold">Get 50% off!</span>
+                      <div className="flex items-center gap-1.5">
+                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                        </svg>
+                        <span className="font-semibold">Save 15%</span>
+                      </div>
+                      <span className="text-blue-400/80">Enter code here →</span>
                     </button>
                   ) : (
                     <motion.div
@@ -641,7 +650,7 @@ export default function Home() {
                           autoFocus
                         />
                       </div>
-                      <p className="text-xs text-white/40 mt-1.5 font-normal antialiased">50% discount on fees</p>
+                      <p className="text-xs text-blue-400 mt-1.5 font-normal antialiased">15% discount on fees</p>
                     </motion.div>
                   )}
                 </div>
@@ -956,9 +965,13 @@ export default function Home() {
                 {/* Brand */}
                 <div>
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-11 h-11 bg-white rounded-xl flex items-center justify-center">
-                      <span className="text-2xl font-bold text-black">U</span>
-                    </div>
+                    <Image
+                      src="/uncryptologo.png"
+                      alt="UnCrypto Logo"
+                      width={44}
+                      height={44}
+                      className="w-11 h-11"
+                    />
                     <h3 className="text-2xl font-bold text-white antialiased">UnCrypto</h3>
                   </div>
                   <p className="text-gray-400 antialiased leading-relaxed mb-6">

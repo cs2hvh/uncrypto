@@ -8,6 +8,8 @@ import { Copy, Check, RefreshCw, Send, Clock } from 'lucide-react';
 import type { TicketWithMessages, Message } from '@/types/ticket';
 import { formatTimestamp, formatDate } from '@/lib/ticket-utils';
 import { toast } from 'sonner';
+import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 export default function TicketPage() {
   const params = useParams();
@@ -160,9 +162,13 @@ export default function TicketPage() {
       <motion.nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/60 backdrop-blur-2xl" initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.6 }}>
         <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-5 flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2 sm:gap-3">
-            <div className="w-8 h-8 sm:w-9 sm:h-9 bg-white rounded-lg flex items-center justify-center">
-              <span className="text-lg sm:text-xl font-bold text-black">U</span>
-            </div>
+            <Image
+              src="/uncryptologo.png"
+              alt="UnCrypto Logo"
+              width={36}
+              height={36}
+              className="w-8 h-8 sm:w-9 sm:h-9"
+            />
             <h1 className="text-lg sm:text-xl font-bold text-white tracking-tight antialiased">UnCrypto</h1>
           </Link>
 
@@ -210,13 +216,6 @@ export default function TicketPage() {
                 <span className={`inline-flex items-center px-3 py-1.5 text-xs font-medium border rounded-md ${statusBadge.className}`}>
                   {statusBadge.label}
                 </span>
-
-                <div className="h-4 w-px bg-white/10"></div>
-
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500 antialiased">Category:</span>
-                  <span className="text-sm font-medium text-white antialiased capitalize">{ticket.category}</span>
-                </div>
 
                 <div className="h-4 w-px bg-white/10"></div>
 
@@ -387,6 +386,8 @@ export default function TicketPage() {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

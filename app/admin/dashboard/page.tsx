@@ -8,6 +8,8 @@ import { LogOut, Filter, Search, Trash2 } from 'lucide-react';
 import type { Ticket } from '@/types/ticket';
 import { formatDate } from '@/lib/ticket-utils';
 import { toast } from 'sonner';
+import Footer from '@/components/Footer';
+import Image from 'next/image';
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -169,9 +171,13 @@ export default function AdminDashboard() {
       <motion.nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/60 backdrop-blur-2xl" initial={{ y: -100 }} animate={{ y: 0 }} transition={{ duration: 0.6 }}>
         <div className="container mx-auto px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-              <span className="text-lg font-bold text-black">U</span>
-            </div>
+            <Image
+              src="/uncryptologo.png"
+              alt="UnCrypto Logo"
+              width={32}
+              height={32}
+              className="w-8 h-8"
+            />
             <span className="text-lg font-bold text-white antialiased">UnCrypto Admin</span>
           </div>
 
@@ -340,6 +346,8 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
+
+      <Footer />
     </div>
   );
 }

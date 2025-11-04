@@ -24,7 +24,7 @@ export default function SupportPage() {
     },
     {
       question: "What are the fees?",
-      answer: "We charge a flat 0.1% fee on all transactions. This is one of the lowest rates in the industry. There are no hidden fees - what you see is what you get. Network fees (gas fees) are paid separately and go directly to the blockchain miners."
+      answer: "We charge a flat 2% fee on all transactions. There are no hidden fees - what you see is what you get. Network fees (gas fees) are paid separately and go directly to the blockchain miners."
     },
     {
       question: "What cryptocurrencies do you support?",
